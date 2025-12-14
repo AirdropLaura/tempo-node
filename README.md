@@ -20,9 +20,8 @@ chmod +x setup.sh
 nano ~/.tempo/.env
 ```
 # Required changes:
-# - CONSENSUS_SIGNING_KEY:   Your 64-char private key (NO 0x prefix)
-# - CONSENSUS_FEE_RECIPIENT: Your wallet address (WITH 0x prefix)
-
+-- CONSENSUS_SIGNING_KEY:   Your 64-char private key (NO 0x prefix)
+-- CONSENSUS_FEE_RECIPIENT: Your wallet address (WITH 0x prefix)
 # 4. Start node
 ```
 cd ~/.tempo
