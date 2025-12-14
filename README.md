@@ -43,13 +43,13 @@ cd ~/.tempo
 
 After running `setup.sh`, edit `~/.tempo/.env`:
 
-```bash
+
 # Your 64-character private key (NO 0x prefix)
 CONSENSUS_SIGNING_KEY=abc123def456...
 
 # Your wallet address (WITH 0x prefix)
 CONSENSUS_FEE_RECIPIENT=0x742d35Cc6634C0532925a3b844Bc454e4438f44e
-```
+
 
 ⚠️ **IMPORTANT:**
 - Private key must be 64 characters **WITHOUT** `0x` prefix
