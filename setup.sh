@@ -1,7 +1,7 @@
 #!/bin/bash
 #==============================================================================
 # Tempo Node - Automated Setup Script
-# https://github.com/YOUR_USERNAME/tempo-node-docker
+# https://github.com/AirdropLaura/tempo-node
 #==============================================================================
 
 set -e
@@ -13,7 +13,7 @@ echo ""
 
 # Check root
 if [ "$EUID" -ne 0 ]; then 
-    echo "⚠️  Run as root:  sudo bash setup.sh"
+    echo "⚠️  Run as root:   sudo bash setup.sh"
     exit 1
 fi
 
@@ -37,7 +37,7 @@ echo "✅ Dependencies installed"
 echo "[3/6] Creating directory..."
 mkdir -p "$TEMPO_DIR"
 cd "$TEMPO_DIR"
-echo "✅ Directory:  $TEMPO_DIR"
+echo "✅ Directory:   $TEMPO_DIR"
 
 echo "[4/6] Pulling Tempo image..."
 docker pull ghcr.io/tempoxyz/tempo:latest
@@ -66,7 +66,7 @@ RUST_LOG=info
 EOF
 
 # Create .env.example
-cat > "$TEMPO_DIR/. env.example" <<'EOF'
+cat > "$TEMPO_DIR/.env.example" <<'EOF'
 CONSENSUS_SIGNING_KEY=your_64_character_private_key_here
 CONSENSUS_FEE_RECIPIENT=0xYourWalletAddressHere
 TEMPO_HTTP_PORT=8547
@@ -77,7 +77,7 @@ EOF
 
 # Create .gitignore
 cat > "$TEMPO_DIR/.gitignore" <<'EOF'
-. env
+.env
 config/signing-key.txt
 data/
 logs/
@@ -90,15 +90,15 @@ mkdir -p "$TEMPO_DIR/data" "$TEMPO_DIR/logs" "$TEMPO_DIR/config"
 
 echo "[6/6] Creating helper scripts..."
 
-# start.sh - FIXED VERSION
+# start.sh
 cat > "$TEMPO_DIR/start.sh" <<'STARTEOF'
 #!/bin/bash
 cd "$(dirname "$0")"
 
-# Load .env
-if [ ! -f . env ]; then
+# Load . env
+if [ !  -f . env ]; then
     echo "❌ .env not found"
-    echo "Create it:  cp .env.example .env && nano .env"
+    echo "Create it:   cp .env.example .env && nano .env"
     exit 1
 fi
 
@@ -106,12 +106,12 @@ source .env
 
 # Validate
 if [ -z "$CONSENSUS_SIGNING_KEY" ] || [[ "$CONSENSUS_SIGNING_KEY" == *"EDIT_ME"* ]]; then
-    echo "❌ Please edit .env first:  nano ~/. tempo/.env"
+    echo "❌ Please edit .env first:   nano ~/. tempo/.env"
     exit 1
 fi
 
 if [ -z "$CONSENSUS_FEE_RECIPIENT" ] || [[ "$CONSENSUS_FEE_RECIPIENT" == *"EDIT_ME"* ]]; then
-    echo "❌ Please edit .env first: nano ~/.tempo/.env"
+    echo "❌ Please edit .env first:  nano ~/.tempo/.env"
     exit 1
 fi
 
@@ -119,7 +119,7 @@ fi
 CLEAN_KEY="${CONSENSUS_SIGNING_KEY#0x}"
 
 echo "Starting Tempo Node..."
-echo "Key: ${CLEAN_KEY:0:20}..."
+echo "Key:  ${CLEAN_KEY: 0:20}..."
 echo "Recipient: $CONSENSUS_FEE_RECIPIENT"
 
 # Stop existing
@@ -137,7 +137,7 @@ KEY_SIZE=$(wc -c < config/signing-key.txt)
 echo "Key file size: $KEY_SIZE bytes"
 
 if [ "$KEY_SIZE" -ne 64 ]; then
-    echo "❌ Invalid key size:  $KEY_SIZE (expected 64)"
+    echo "❌ Invalid key size:   $KEY_SIZE (expected 64)"
     exit 1
 fi
 
@@ -210,7 +210,7 @@ if docker ps --format '{{.Names}}' | grep -q "^tempo-node$"; then
     echo "════════════════════════════════════════"
     docker logs -f tempo-node 2>&1
 else
-    echo "❌ Node not running.  Start with: ./start.sh"
+    echo "❌ Node not running.   Start with: ./start.sh"
 fi
 EOF
 
@@ -265,7 +265,7 @@ fi
 echo "1️⃣ Block Number:"
 curl -s -X POST $RPC \
   -H 'Content-Type: application/json' \
-  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id": 1}' | jq . 
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' | jq . 
 
 echo ""
 echo "2️⃣ Chain ID:"
@@ -283,7 +283,7 @@ echo ""
 echo "✅ RPC tests complete"
 EOF
 
-# update.sh
+# update. sh
 cat > "$TEMPO_DIR/update.sh" <<'EOF'
 #!/bin/bash
 cd "$(dirname "$0")"
@@ -342,7 +342,7 @@ chmod +x "$TEMPO_DIR"/*.sh
 echo "✅ All scripts created"
 echo ""
 echo "╔════════════════════════════════════════╗"
-echo "║        ✅ SETUP COMPLETE!                ║"
+echo "║        ✅ SETUP COMPLETE!                 ║"
 echo "╚════════════════════════════════════════╝"
 echo ""
 echo "📝 NEXT STEPS:"
@@ -362,7 +362,7 @@ echo "3. Check status:"
 echo "   ./status.sh"
 echo ""
 echo "📚 Commands:"
-echo "   ./start. sh      - Start node"
+echo "   ./start.sh      - Start node"
 echo "   ./stop.sh       - Stop node"
 echo "   ./restart.sh    - Restart node"
 echo "   ./logs.sh       - View logs"
