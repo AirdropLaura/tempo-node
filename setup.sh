@@ -40,8 +40,38 @@ cd "$TEMPO_DIR"
 echo "✅ Directory:   $TEMPO_DIR"
 
 echo "[4/6] Pulling Tempo image..."
-docker pull ghcr.io/tempoxyz/tempo:latest
-echo "✅ Image pulled"
+echo "This may take a few minutes..."
+
+# Try to pull with retry
+MAX_RETRIES=3
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    if docker pull ghcr.io/tempoxyz/tempo:latest 2>&1; then
+        echo "✅ Image pulled successfully"
+        break
+    else
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+            echo "⚠️  Pull failed, retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+            sleep 5
+        else
+            echo "❌ Failed to pull image after $MAX_RETRIES attempts"
+            echo ""
+            echo "Possible causes:"
+            echo "  1. Network connectivity issue"
+            echo "  2. GitHub Container Registry rate limit"
+            echo "  3. DNS resolution problem"
+            echo ""
+            echo "Solutions:"
+            echo "  - Wait a few minutes and run:  sudo bash setup.sh"
+            echo "  - Check internet connection"
+            echo "  - Try manual pull: docker pull ghcr.io/tempoxyz/tempo:latest"
+            echo ""
+            exit 1
+        fi
+    fi
+done
 
 echo "[5/6] Creating configuration files..."
 
