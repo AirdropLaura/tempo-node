@@ -126,7 +126,7 @@ cat > "$TEMPO_DIR/start.sh" <<'STARTEOF'
 cd "$(dirname "$0")"
 
 # Load . env
-if [ !  -f . env ]; then
+if [ ! -f .env ]; then
     echo "❌ .env not found"
     echo "Create it:   cp .env.example .env && nano .env"
     exit 1
@@ -185,7 +185,7 @@ docker run -d \
   ghcr.io/tempoxyz/tempo:latest \
   node \
   --datadir /data \
-  --follow \                    # ← INI YANG PENTING! 
+  --follow \
   --port 30303 \
   --discovery.addr 0.0.0.0 \
   --discovery.port 30303 \
